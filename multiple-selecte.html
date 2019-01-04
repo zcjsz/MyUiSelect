@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myapp">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="node_modules/angular/angular.js"></script>
+    <script type="text/javascript" src="node_modules/ui-select/dist/select.js"></script>
+    <script type="text/javascript" src="node_modules/angular-sanitize/angular-sanitize.js"></script>
+    <link rel="stylesheet" href="node_modules/ui-select/dist/select.css">
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <!--<link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.css">-->
+    <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/3.4.5/select2.css">-->
+    <!--<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.8.5/css/selectize.default.css">-->
+</head>
+
+<body ng-controller="MainCtrl">
+
+    <ui-select ng-model="selected.value" theme="bootstrap" ng-change="change()">
+        <ui-select-match>
+            <span ng-bind="$select.selected.name"></span>
+        </ui-select-match>
+        <ui-select-choices repeat="item in (itemArray | filter: $select.search) track by item.id" ui-disable-choice="item.status == 'inactive'">
+            <span ng-bind="item.name"></span>
+        </ui-select-choices>
+    </ui-select>
+
+    <p></p>
+
+    <ui-select multiple ng-model="selected.value" theme="bootstrap" ng-change="change()">
+        <ui-select-match>
+            <span>{{$item.name}}</span>
+        </ui-select-match>
+        <ui-select-choices repeat="item in (itemArray | filter: $select.search) track by item.id" ui-disable-choice="item.status == 'inactive'">
+            <span ng-bind="item.name"></span>
+        </ui-select-choices>
+    </ui-select>
+
+    <script>
+
+        let myapp = angular.module("myapp", ['ui.select', 'ngSanitize']);
+
+        myapp.controller('MainCtrl', ['$scope', function ($scope){
+            $scope.itemArray = [
+                {id: 1, name: 'first',  status: 'active'},
+                {id: 2, name: 'second', status: 'inactive'},
+                {id: 3, name: 'third',  status: 'active' },
+                {id: 4, name: 'fourth', status: 'active'},
+                {id: 5, name: 'fifth',  status: 'active'},
+            ];
+
+            $scope.selected = { value : $scope.itemArray[0] };
+
+            $scope.change = function(){
+                console.log($scope.selected.value);
+            };
+
+        }]);
+
+    </script>
+
+</body>
+</html>
